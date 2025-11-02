@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sign In</title>
+
+  <!-- Tailwind via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- IMPORTANT: Enable class-based dark mode -->
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: { extend: {} }
+    }
+  </script>
+
+  <!-- Set initial theme BEFORE paint -->
+  <script>
+    (function () {
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const stored = localStorage.getItem('theme');
+      const useDark = stored ? stored === 'dark' : prefersDark;
+      const html = document.documentElement;
+      if (useDark) html.classList.add('dark'); else html.classList.remove('dark');
+    })();
+  </script>
+
+  <style>
+    body {
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue",
+        Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+    }
+  </style>
+</head>
+
+<body class="bg-slate-100 dark:bg-slate-900 min-h-screen flex items-center justify-center p-4 transition-colors duration-300">
+  <div class="flex flex-col md:flex-row w-full max-w-4xl bg-white dark:bg-slate-800 shadow-xl rounded-2xl overflow-hidden transition-colors duration-300">
+
+    <!-- Left gradient panel -->
+    <div class="md:w-1/2 bg-gradient-to-br from-blue-600 to-cyan-400 flex items-center justify-center p-10 text-white">
+      <div class="text-center space-y-3">
+        <h2 class="text-3xl font-bold">Welcome Back</h2>
+        <p class="text-sm/6 opacity-90">
+          Build faster with AI-powered products. Sign in to continue.
+        </p>
+      </div>
+    </div>
+
+    <!-- Right login form -->
+    <div class="md:w-1/2 p-8 relative">
+      <!-- Theme toggle -->
+      <button id="theme-toggle"
+              class="absolute top-4 right-4 text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition"
+              title="Toggle dark mode"
+              aria-label="Toggle dark mode">
+        <!-- icon is set by JS on load -->
+      </button>
+
+      <h3 class="text-2xl font-bold text-slate-800 dark:text-slate-100 mb-6 text-center">Sign in to your account</h3>
+
+      <form class="space-y-5" action="#" method="post" novalidate>
+        <!-- Email -->
+        <div>
+          <label for="email" class="block text-slate-700 dark:text-slate-200 mb-2">Email</label>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            autocomplete="email"
+            required
+            class="w-full border border-slate-300 dark:border-slate-600 rounded-lg px-4 py-2 bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            placeholder="you@example.com"
+          >
+        </div>
+
+        <!-- Password + Reset -->
+        <div>
+          <div class="flex items-center justify-between mb-2">
+            <label for="password" class="text-slate-700 dark:text-slate-200">Password</label>
+            <a href="#" class="text-sm text-blue-600 hover:text-blue-700 hover:underline">
+              Reset password
+            </a>
+          </div>
+          <input
+            id="password"
+            name="password"
+            type="password"
+            autocomplete="current-password"
+            required
+            class="w-full border border-slate-300 dark:border-slate-600 rounded-lg px-4 py-2 bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            placeholder="Your password"
+          >
+        </div>
+
+        <!-- Remember me -->
+        <div class="flex items-center">
+          <input id="remember" name="remember" type="checkbox"
+                 class="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-400">
+          <label for="remember" class="ml-2 text-sm text-slate-700 dark:text-slate-200">Remember me</label>
+        </div>
+
+        <!-- Submit -->
+        <button type="submit"
+                class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">
+          Sign in
+        </button>
+
+        <!-- Divider -->
+        <div class="flex items-center justify-center space-x-2 my-4">
+          <div class="h-px bg-slate-300 dark:bg-slate-600 flex-1"></div>
+          <span class="text-slate-500 dark:text-slate-400 text-sm">or</span>
+          <div class="h-px bg-slate-300 dark:bg-slate-600 flex-1"></div>
+        </div>
+
+        <!-- Google Sign-in -->
+        <button type="button"
+                class="w-full flex items-center justify-center gap-2 border border-slate-300 dark:border-slate-600 rounded-lg py-2 hover:bg-slate-50 dark:hover:bg-slate-700 transition"
+                aria-label="Sign in with Google">
+          <img src="https://www.svgrepo.com/show/355037/google.svg" alt="Google" class="w-5 h-5">
+          <span class="text-slate-700 dark:text-slate-200">Sign in with Google</span>
+        </button>
+
+        <!-- Create account -->
+        <p class="text-center text-sm text-slate-600 dark:text-slate-300">
+          Don’t have an account?
+          <a href="#" class="text-blue-600 hover:text-blue-700 hover:underline">Create one</a>
+        </p>
+      </form>
+
+      <p class="mt-6 text-[12px] leading-5 text-slate-500 dark:text-slate-400 text-center">
+        By continuing, you agree to our
+        <a href="#" class="underline hover:text-slate-700 dark:hover:text-slate-200">Terms</a> and
+        <a href="#" class="underline hover:text-slate-700 dark:hover:text-slate-200">Privacy Policy</a>.
+      </p>
+    </div>
+  </div>
+
+  <!-- Toggle logic AFTER DOM -->
+  <script>
+    (function () {
+      const toggle = document.getElementById('theme-toggle');
+      const html = document.documentElement;
+
+      function syncIcon() {
+        const isDark = html.classList.contains('dark');
+        toggle.textContent = isDark ? '☀️' : '🌙';
+        toggle.setAttribute('aria-pressed', String(isDark));
+      }
+
+      toggle.addEventListener('click', () => {
+        const isDark = html.classList.toggle('dark');
+        localStorage.theme = isDark ? 'dark' : 'light';
+        syncIcon();
+      });
+
+      // Set initial icon to match initial theme
+      syncIcon();
+    })();
+  </script>
+</body>
+</html>
